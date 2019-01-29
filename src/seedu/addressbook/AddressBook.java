@@ -1121,7 +1121,7 @@ public class AddressBook {
                 + getUsageInfoForViewCommand() + LS
                 + getUsageInfoForDeleteCommand() + LS
                 + getUsageInfoForClearCommand() + LS
-                + getUsageInfoForExitCommand() + LSgi
+                + getUsageInfoForExitCommand() + LS
                 + getUsageInfoForHelpCommand() + LS
                 + getUsageInfoForCountCommand();
     }

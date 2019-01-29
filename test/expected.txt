@@ -71,6 +71,7 @@
 || 
 || exit: Exits the program.	Example: exit
 || help: Shows program usage instructions.	Example: help
+|| count: Counts number of persons in address book      Example: count
 || ===================================================
 || Enter command: || [Command entered:  clear]
 || Address book has been cleared!
@@ -184,12 +185,13 @@
 || 0 persons found!
 || ===================================================
 || Enter command: || [Command entered:  find betsy]
-|| 
-|| 0 persons found!
+|| 	1. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+||
+|| 1 persons found!
 || ===================================================
 || Enter command: || [Command entered:  find Betsy]
 || 	1. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
-|| 
+||
 || 1 persons found!
 || ===================================================
 || Enter command: || [Command entered:  find Dickson]
@@ -203,6 +205,9 @@
 || 	2. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
 || 
 || 2 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:    count]
+|| There is 5 Persons in the Address Book
 || ===================================================
 || Enter command: || [Command entered:  delete]
 || Invalid command format: delete 

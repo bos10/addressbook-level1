@@ -1,0 +1,1008 @@
+[33mcommit 643a2a20696641f3f66a36fc0a19b14d41ddf27f[m[33m ([m[1;36mHEAD -> [m[1;32mBoston_Edit[m[33m, [m[1;31morigin/Boston_Edit[m[33m)[m
+Author: bos10 <bostoncheong@gmail.com>
+Date:   Tue Jan 29 12:53:27 2019 +0800
+
+    Added new 'count' method to display number of persons in address book
+
+[33mcommit a3044813b52aa52503f270cb5c96e5e7a3e1f5f2[m[33m ([m[1;32mmaster[m[33m)[m
+Author: bos10 <bostoncheong@gmail.com>
+Date:   Mon Jan 28 23:50:37 2019 +0800
+
+    Modified 'find' method to allow case-insensitive
+
+[33mcommit bb493e8d8b36aa0d7d44ea35413ec92a43f2fdf3[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 13daa30 bfbbf71
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Dec 5 01:19:46 2018 +0800
+
+    Hide Gradle from IntelliJ (#109)
+    
+    Since our project is meant to be built with IntelliJ, and without
+    Gradle, remove the Gradle wrapper and rename the `build.gradle` file to
+    `build.gradle.txt` so that IntelliJ won't think that we have a Gradle
+    build file in the repo.
+    
+      [1/3] Add netlify.toml
+      [2/3] Remove Gradle wrapper
+      [3/3] Rename `build.gradle` to `build.gradle.txt`
+
+[33mcommit bfbbf7158437eabfc46f2397985955e2c3bc5f01[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Sep 6 00:34:48 2018 +0800
+
+    Rename `build.gradle` to `build.gradle.txt`
+    
+    We have a `build.gradle` file in the repo which tells Travis/Netlify how
+    to build our documentation with asciidoctor.
+    
+    However, when importing this repo as a project, IntelliJ will detect the
+    `build.gradle` file and prompt the user with the following:
+    
+        Unlinked Gradle project?
+    
+        Import Gradle project, this will also enable Gradle Tool Window...
+    
+    The correct action that should be taken by the user in this case is
+    _not_ to "Import Gradle project", as this project is meant to be built
+    without Gradle. However, this prompt may mislead the user into choosing
+    the wrong thing.
+    
+    Fix this by renaming `build.gradle` into `build.gradle.txt`. Keeping the
+    term `build.gradle` in the filename will allow readers to easily
+    identify the file as a `build.gradle` file, while the `.txt` extension
+    will make IntelliJ, and likely all other IDEs, stop identifying it as a
+    Gradle file (since text files, by definition, can contain anything).
+
+[33mcommit 0c52785974a5726cdfcadef66688411f2dbc9de8[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Sep 6 00:06:15 2018 +0800
+
+    Remove Gradle wrapper
+    
+    Our repo contains the Gradle wrapper to ensure that the correct Gradle
+    version is used when we are building our documentation with asciidoctor.
+    
+    However, IntelliJ has a strange quirk where if:
+    
+      * The project is imported by "Create Project from existing Sources",
+        and,
+    
+      * The `gradle-wrapper.jar` in the repo is selected as a library
+        (which is done by default)
+    
+    then IntelliJ might end up marking the `src` directory as "not a sources
+    root directory", resulting in IntelliJ not being able to compile and run
+    the project[1].
+    
+    While workarounds exists (such as telling users not to select
+    `gradle-wrapper.jar` in the library selection stage), ultimately this
+    boils down to the fact that we include the gradle wrapper in the repo
+    even though ordinary users won't be using it.
+    
+    So, let's remove the Gradle wrapper in the repo.
+    
+    To ensure that Travis/Netlify install and use the correct Gradle
+    version, let's set up a system where Travis/Netlify will download the
+    Gradle wrapper at build time. We are already hosting the Gradle wrapper
+    of the version we want at https://se-edu.github.io/gradle-wrapper
+    
+    Once the Gradle wrapper is gone, we also don't need the troubleshooting
+    step added by [1] anymore, so let's remove it.
+    
+    [1] https://github.com/se-edu/addressbook-level1/commit/13daa30527fb541e6e7d073ec308537d1f21d871
+
+[33mcommit f1d325b549d9248fd58b5e554d2b75088dc4a759[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Sep 13 21:29:30 2018 +0800
+
+    Add netlify.toml
+    
+    We use Netlify to build and host deploy previews of our documentation
+    for our PRs. Currently, Netlify is configured to build our documentation
+    using the command "./gradlew asciidoctor".
+    
+    Without a netlify.toml file in our repo, only the Nelify account owner
+    can change that command, which is inconvenient.
+    
+    Let's add a netlify.toml file to the repo, so that any committer to the
+    repo can change the Netlify configuration.
+
+[33mcommit 13daa30527fb541e6e7d073ec308537d1f21d871[m
+Author: Eugene Peh <eugenepeh@users.noreply.github.com>
+Date:   Sat Aug 25 10:36:10 2018 +0800
+
+    DeveloperGuide: add solution to src being treated as normal folder (#105)
+    
+    Occasionally, new developers may accidentally import the project as
+    a Gradle project.
+    
+    This cause IntelliJ to often triggers Gradle synchronization which
+    allows Gradle to impose the project to use its configuration. Due
+    to this issue, developers will encounter the problem of marked
+    directory keep getting reset upon restarting IntelliJ.
+    
+    Let's add the solution to this problem in the troubleshooting
+    section to help the developers who have accidentally misconfigured
+    the importation.
+
+[33mcommit 1827da83a97e94fd7cd2c663f3c2a2b6f114250e[m
+Author: Loo Rong Jie <loorongjie@gmail.com>
+Date:   Sat Aug 25 10:35:40 2018 +0800
+
+    [#107] runtests.bat: Allow user to run script outside test folder (#108)
+    
+    runtests.bat script does not work outside the test folder.
+    
+    Developers working on the project often have their working directory
+    set to the root of the project. It is inconvenient to switch in and out
+    of the test folder repeatedly in an edit-debug cycle.
+    
+    To reduce the hassle, let's add the commands in bat script to perform
+    the switching of directory automatically and hence increase our
+    productivity.
+
+[33mcommit ca2ab8c7cbf6b303f6e93327fbbdcc8250714067[m
+Author: Tan Wang Leng <tanwangleng@outlook.com>
+Date:   Sun Aug 19 16:06:45 2018 +0800
+
+    [#103] LearningOutcomes.adoc: fix link to download code (#104)
+    
+    Before fb74fba, learning outcomes were written in README.adoc.
+    Developers were instructed to use the 'Clone or download' button
+    **above** the page, when viewing README.adoc on GitHub.
+    
+    This instruction no longer make sense after learning outcomes have a
+    .adoc page on its own. Furthermore, the 'Clone or download' button will
+    not be available on the rendered static website version anyway, even if
+    it stayed in README.adoc.
+    
+    Let's fix the instruction's link to download code, by using the
+    `site-githuburl` attribute declared in `build.gradle`. That attribute
+    will not be declared when viewing the .adoc page on GitHub, so declare a
+    separate attribute for `env-github` environment.
+
+[33mcommit a9270ee306badf96936da1ba6dbf98f95cc49ed7[m
+Merge: 65762dd 48d9437
+Author: Jun An <E0002937@u.nus.edu>
+Date:   Mon Aug 13 13:22:15 2018 +0800
+
+    docs: fix documentation (#102)
+    
+    In UserGuide and DeveloperGuide, some sections are inconsistent
+    on whether the end of the bullet point has full stops or not. Let's
+    fix them.
+    
+    In LearningOutcomes, some of the links are broken. Let's fix them
+    as well.
+
+[33mcommit 48d94378331364a0a0fa3748817bcaae15f33893[m
+Author: Jun An <E0002937@u.nus.edu>
+Date:   Sat Aug 11 20:36:18 2018 +0800
+
+    docs: fix documentation
+    
+    In UserGuide and DeveloperGuide, some sections are inconsistent
+    on whether the end of the bullet point has full stops or not. Let's
+    fix them.
+    
+    In LearningOutcomes, some of the links are broken. Let's fix them
+    as well.
+
+[33mcommit 65762ddf8c601aa9d80b5e2ddd2877a8a61f6e52[m
+Author: Eugene Peh <eugenepeh@users.noreply.github.com>
+Date:   Mon Aug 6 09:00:17 2018 +0800
+
+    [#92] Fix runtests scripts proceeding on compilation error (#101)
+    
+    Runtests scripts compile the program under test, before executing the
+    tests. The tests always execute regardless of whether the compilation
+    succeeds or not.
+    
+    If the program has compilation errors, the runtests scripts are actually
+    testing an older version of the program without the errors. This results
+    in misleading test results.
+    
+    Let's teach the scripts to terminate immediately when the program fails
+    to compile.
+
+[33mcommit d10571b8fc869b0a4ca05d70380eac56d7b1975e[m
+Author: Jun An <E0002937@u.nus.edu>
+Date:   Tue Jul 31 15:02:08 2018 +0800
+
+    [#99] Developer Guide: update to use Java 9 (#100)
+    
+    The project currently runs on Java 8.
+    
+    Since AddressBookL4 is already running on Java 9, this project should
+    be upgraded to run on Java 9 as well for consistency.
+    
+    Since the project is already compatible with Java 9, let's update the
+    DeveloperGuide to mention using Java 9 or later.
+
+[33mcommit 511b83478af513a4c6f8e6bda86cd1b3f7cffffa[m
+Merge: 7d1a71a 6ea1f4e
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Jul 5 22:53:30 2018 +0800
+
+    Port over documentation template from AB-4 (#98)
+
+[33mcommit 6ea1f4edcb31754b84ffc0b07141b89a571e6159[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Jul 5 22:26:37 2018 +0800
+
+    docs: configure template
+    
+    In the previous commit, we imported the documentation template from
+    AddressBook-Level4.
+    
+    However, the template is still configured for AddressBook-Level4.
+    
+    Let's use our own configuration.
+
+[33mcommit b6e0e9c4522e6a1b020eb7b89d7b1e1c214edc45[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Jul 5 22:17:05 2018 +0800
+
+    docs: port over template from AddressBook-Level4
+    
+    The following commits implement the documentation template in
+    AddressBook-Level4:
+    
+        686ec9ac9b9a17e5962c2341c08471e89d452d23..a1b29c20c825312a14ffe6b8242baee056cb5017
+    
+    For consistency with AddressBook-Level4, port over those commits into
+    this repo.
+    
+    This is done by running the following shell script:
+    
+        git fetch https://github.com/se-edu/addressbook-level4 master &&
+        git diff --binary 686ec9ac9b9a17e5962c2341c08471e89d452d23..a1b29c20c825312a14ffe6b8242baee056cb5017 >patch &&
+        git apply --3way --include=build.gradle --include='docs/images/*' --include='docs/stylesheets/*' --include='docs/templates/*' patch
+    
+    and fixing the conflicts in build.gradle.
+
+[33mcommit 7d1a71aa643e8483dfac4b687f2a1435ab42d6d8[m
+Merge: 62a5ba0 274dbc9
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Thu Jul 5 00:25:13 2018 +0800
+
+    Refactor UserGuide, DeveloperGuide and LearningOutcomes into separate docs (#97)
+    
+    Refactor out the User Guide, Developer Guide and Learning Outcomes into
+    separate documents for consistency with the other AddressBook levels.
+
+[33mcommit 274dbc93fb403dec3cfea3a45c0b3f962adf5446[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 22:39:35 2018 +0800
+
+    README.adoc: add site map
+    
+    Allow visitors to navigate to the other documents in the documentation.
+
+[33mcommit fb74fbae41df8a5074b7ee1cdb3f4a2b215c4db0[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 22:37:55 2018 +0800
+
+    docs: refactor out LearningOutcomes into a separate file
+    
+    Do this for consistency with the other AddressBook levels.
+
+[33mcommit 3d8e90aa0099e3b29e69a74f79f3e4c7186774c6[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 22:34:20 2018 +0800
+
+    docs: refactor out UserGuide into separate file
+    
+    Do this for consistency with the other AddressBook levels.
+
+[33mcommit 1e7a58d1033cdc1e1d7bbad25c086362f976d5b8[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 22:30:51 2018 +0800
+
+    docs: refactor out DeveloperGuide into separate file
+    
+    Do this for consistency with the other AddressBook levels.
+
+[33mcommit 62a5ba066c82d2c50f00e78ca9c1cdc1a6665b1b[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 10:44:03 2018 +0800
+
+    README.adoc: fix link to SE-EDU Team
+
+[33mcommit fb5acd62be9148f6a1c9908d610381665aa0015f[m
+Merge: d559db4 c69ef5e
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 10:31:34 2018 +0800
+
+    Convert documentation to asciidoc format (#96)
+    
+    Convert documentation to asciidoc format, to be consistent with
+    AddressBook-Level4.
+    
+      [1/10] Translate markdown files into asciidoc files
+      [2/10] Add Gradle wrapper with Gradle 4.8.1
+      [3/10] Setup asciidoc-to-html build system
+      [4/10] docs: add index.adoc
+      [5/10] README.adoc: automatically generate table of contents
+      [6/10] README.adoc: fix heading levels to be consistent
+      [7/10] README.adoc: don't manually specify numbers in numbered lists
+      [8/10] README.adoc: replace links with cross-references
+      [9/10] README.adoc: copy-edit
+      [10/10] Remove README.md
+
+[33mcommit c69ef5ee6ec489f2d7a378a593b8925ae9ba5a02[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Wed Jul 4 01:52:03 2018 +0800
+
+    Remove README.md
+    
+    The conversion of all markdown files to asciidoc is now complete, and
+    the markdown files are not needed anymore.
+
+[33mcommit 3cb8007538aab34422b43793968c5e32131936ae[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:45:01 2018 +0800
+
+    README.adoc: copy-edit
+    
+    The README.adoc file was translated from README.md using pandoc.
+    
+    However, pandoc did not get the translation completely correct, and so
+    there are some mistakes here and there.
+    
+    Copy-edit README.adoc by reading through it, comparing it with
+    README.md, and correcting the errors.
+
+[33mcommit 7737d382ceb57df82cb275ab7c62eda8335eafde[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:49:06 2018 +0800
+
+    README.adoc: replace links with cross-references
+    
+    Internal links using HTML anchors can only be used with asciidoctor's
+    html backends.
+    
+    Let's use asciidoctor's cross-reference syntax, which allows our
+    document's internal links to be supported in other backends.
+
+[33mcommit a7eea83523ebb441fbbef5e8db6bd388beee8464[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:36:25 2018 +0800
+
+    README.adoc: don't manually specify numbers in numbered lists
+    
+    This reduces the number of required modifications when we wish to insert
+    an item in the middle of the list.
+
+[33mcommit 9478746e37000971355c5f3390e15f8b49d638a2[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:34:08 2018 +0800
+
+    README.adoc: fix heading levels to be consistent
+    
+    Asciidoctor complains with warnings when the heading levels are not
+    consistent (e.g. a heading with level 4 when the heading directly above
+    it is of level 2).
+    
+    Let's make asciidoctor happy by fixing the heading levels.
+
+[33mcommit 411e810f67c5d648d5eac79df5fdc563cc226c5c[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:27:58 2018 +0800
+
+    README.adoc: automatically generate table of contents
+    
+    Manually maintaining a table of contents is tedious, so let's replace it
+    with an automatically generated one.
+
+[33mcommit 632cb3aece648928883fc83d4daae8ed08791f67[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:25:25 2018 +0800
+
+    docs: add index.adoc
+    
+    This document will mirror the contents of README.adoc, to serve as the
+    website home page.
+
+[33mcommit 62136d85b74770e7e4cea427c839ed5e52f9d877[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:24:17 2018 +0800
+
+    Setup asciidoc-to-html build system
+    
+    Our markdown documentation is published to GitHub pages via its
+    automatic markdown files publishing support[1]. However, this mechanism
+    does not support asciidoc files.
+    
+    We are in the process of converting all of our documentation to
+    asciidoc, so we'll need to setup our own GitHub pages build and
+    deployment system.
+    
+    Let's reuse the asciidoc-to-html build system in addressbook-level4[2]
+    by copying the relevant code/files.
+    
+    [1] https://github.com/blog/2289-publishing-with-github-pages-now-as-easy-as-1-2-3
+    [2] https://github.com/se-edu/addressbook-level4
+
+[33mcommit cf3446a2a2d93c626a3d2c9f0aa7a585f76a67b0[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:19:54 2018 +0800
+
+    Add Gradle wrapper with Gradle 4.8.1
+    
+    Gradle 4.8.1 is the latest version of Gradle.
+    
+    The wrapper was created by running the following command:
+    
+        gradlew wrapper --gradle-version 4.8.1
+    
+    and converting the line endings of gradlew.bat to unix to match our line
+    ending conventions.
+
+[33mcommit cef73bf6e971283083b95e867650d5f444da4d75[m
+Author: Paul Tan <pyokagan@gmail.com>
+Date:   Mon Jul 2 18:17:34 2018 +0800
+
+    Translate markdown files into asciidoc files
+    
+    We are going to convert all of our documentation from markdown to
+    asciidoc format, in order to take advantage of the additional features
+    and semantic elements that asciidoc offers such as automatic section
+    numbering, admonitions and automatic table of contents (TOC) generation.
+    
+    Converting README.md by hand is going to be extremely tedious.
+    
+    As such, as a step towards the full conversion of our documentation to
+    asciidoc, let's enlist the help of pandoc[1] to translate our
+    documentation.
+    
+    The translation is done with pandoc 2.2.1 via this shell script:
+    
+        for x in $(find -name '*.md'); do
+            pandoc -f markdown_github-hard_line_breaks --wrap=preserve --atx-headers -o "${x%*.md}.adoc" "$x"
+        done
+    
+    While the majority of the translation is done faithfully, there are
+    still some errors here and there in the translated files. We will be
+    fixing them in subsequent commits.
+    
+    [1] http://pandoc.org/
+
+[33mcommit d559db4f9c95baf1d3c3e8e8f90067d587c68708[m
+Author: Eugene Peh <eugenepeh@users.noreply.github.com>
+Date:   Tue Jan 30 11:32:13 2018 +0800
+
+    [#89] Test folder: add addressbook.txt (#90)
+    
+    The default storage file 'addressbook.txt' is not provided by default.
+    The program has to create a new storage file, and this process is
+    written in the program's log.
+    
+    Due to the additional information in the log, the first test run after
+    cloning the master always result in failure, as the additional
+    information creates a difference between actual.txt and expected.txt,
+    causing the test to fail.
+    
+    Let's add the default storage file 'addressbook.txt' into the test
+    folder so that the runtests.bat will stop failing on first run.
+
+[33mcommit e013f52873d1441a1b4ede979bc953d19f0f6296[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 12 23:57:26 2017 +0800
+
+    README: update LOs to refer to se-book
+
+[33mcommit ff94fca6ff83e9c8a75f378074fdd6555ac911e7[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 5 19:45:52 2017 +0800
+
+    README: add more details to the setup and testing instructions
+
+[33mcommit 8743c6a866c92ac847799167f17b09a50d3d6831[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 5 19:44:56 2017 +0800
+
+    README: refine first half of learning outcomes to refer to the se-book
+
+[33mcommit ca4f4fcdf19d59d4cee94f8cea08ad9a9a80351c[m
+Author: Miao Ling <limmlingg@gmail.com>
+Date:   Thu Jul 27 12:27:11 2017 +0800
+
+    [#87] Remove Eclipse project files (#88)
+    
+    As we have moved to IntelliJ, the Eclipse project files are no longer
+    needed.
+    
+    Let's remove these files/folders:
+    * .classpath
+    * .project
+    * .settings/*
+    * docs/*.pptx
+
+[33mcommit 8c6fd8a571d3f4f8ccd5aaf321e7e4eb1c9fce7d[m
+Author: Miao Ling <limmlingg@gmail.com>
+Date:   Fri Jul 21 16:37:21 2017 +0800
+
+    [#83] Contributors and Contact: point to same section in se-edu (#86)
+    
+    These sections can be found in se-edu. There is no need to duplicate
+    them here.
+    
+    Let's make these sections point to the respective sections in se-edu.
+
+[33mcommit a894d3fd42492288072420720536031398c4bc75[m
+Author: Miao Ling <limmlingg@gmail.com>
+Date:   Thu Jul 20 16:04:50 2017 +0800
+
+    Convert README.md from Eclipse to IntelliJ (#85)
+
+[33mcommit a4515e3895ca1af1fc7c1753dec0a90c37366032[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Apr 1 13:21:34 2017 +0800
+
+    Set theme jekyll-theme-cayman
+
+[33mcommit 19b1da19e1dba12e0707d04574c12c90a46c64d9[m
+Author: Akshay Narayan <okkhoy@gmail.com>
+Date:   Mon Jan 23 14:17:06 2017 +0800
+
+    [#63] add additional option for LO-1KLoC (#63)
+
+[33mcommit c7a1d33365ddfc57ea21f852eaadd782eb923ab8[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Jan 19 14:19:40 2017 +0800
+
+    Fix link to java coding standard
+
+[33mcommit fcc648ee603057d27581f6c4f3de0bbe68bd496d[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Jan 1 20:55:41 2017 +0800
+
+    Remove space before colon
+
+[33mcommit 47c7da07e92eefdaf8a5fc262094572a1ba171f5[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Jan 1 20:53:35 2017 +0800
+
+    Raise level of exercise headings
+
+[33mcommit 38be8c7887c8ff059084d4df7848aa33fa390301[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Jan 1 20:49:07 2017 +0800
+
+    Fix cosmetic issues of learning outcomes
+
+[33mcommit 79e3c3bb0a31273908796c09e5faabb532c9ab22[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 19:57:24 2016 +0800
+
+    [#7] Add a design description to the developer guide
+    
+    Fixes #7
+
+[33mcommit a06d790415edde6e3d1b729f928d95c3820dea75[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 19:40:24 2016 +0800
+
+    Refine ToC
+
+[33mcommit f4fc356d57304032eb1a52ec0a0ff093b9307850[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 19:33:39 2016 +0800
+
+    Add LO for method abstraction
+
+[33mcommit 0465535d35e467e6e78a9a7346c2a5556e820650[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:21:18 2016 +0800
+
+    Change scope of private members from public to private
+
+[33mcommit dff416d21ff0dbfe376c533af94a72f02746eb72[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:13:48 2016 +0800
+
+    Remove compiler warning in getLinesInFile(String filePath)
+
+[33mcommit 592b3ab6d21b698db97c1312f2edea437d7251f9[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:10:23 2016 +0800
+
+    Remove unused method deletePersonFromAddressBook(int index)
+
+[33mcommit ef201a01725eaa26bdfd003bf5bb079d3f724446[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:09:27 2016 +0800
+
+    Remove compiler warning in splitByWhitespace(String toSplit)
+
+[33mcommit 51ada3c5fcccafb60ef7b8bcd72199bbc551eeab[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:04:49 2016 +0800
+
+    Remove redundant method getLatestPersonListingView()
+
+[33mcommit a93bb237cfb0860d5efc8d81a4bce5b8c6ed9122[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 12:04:12 2016 +0800
+
+    Refine method header comments to follow coding style
+
+[33mcommit 66c2d59e6b0863e65654a598646daeb8bd35a50f[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 11:36:00 2016 +0800
+
+    Fix outdated comment in isValidFilePath
+
+[33mcommit a5461870e3795d934b9cf44aba36abe3ebf72d69[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Dec 25 11:00:03 2016 +0800
+
+    Refine NOTE comments
+
+[33mcommit 6954c21746fb558eb760d506b7c9468defa98d08[m
+Author: brandonyeoxg <brandonyeoxg@gmail.com>
+Date:   Fri Dec 23 22:19:31 2016 +0800
+
+    [#61] Update user guide for changing the save location (#62)
+    
+    * Update user guide to reflect the new implementation of isValidFilePath.
+    
+    * Fix formatting error for changing save location in user guide.
+    
+    * Fix formatting error for changing save location in user guide.
+    
+    * Fix formatting error for changing save location in user guide.
+    
+    Fix formatting error for changing save location in user guide.
+    
+    Fix formatting for user guide change save location.
+    
+    * Slight edit for user guide on changing the save location.
+    
+    * Improve clarity of 'regular' file.
+    
+    * Update regular file explanation.
+
+[33mcommit f51ffeb9b0b584df1a6b704e56aaddeb973808db[m
+Author: brandonyeoxg <brandonyeoxg@gmail.com>
+Date:   Mon Dec 19 16:21:15 2016 +0800
+
+    [#55] Implement a more rigorous validity check for file path (#56)
+
+[33mcommit 800290bf7008520c1e713058fa9e0eb265daac53[m
+Author: Thenaesh Elango <thenaeshelango@gmail.com>
+Date:   Sun Dec 11 10:44:14 2016 +0800
+
+    [#4] Convert coding best practices into a markdown document (#60)
+
+[33mcommit 668413ca452bb7307d5ec219e95fd4f96fe803df[m
+Author: Huang Chao <huangchao0825@gmail.com>
+Date:   Fri Dec 9 16:46:59 2016 +0800
+
+    [#5] Add level2 headings to table of contents (#58)
+
+[33mcommit c72e691709e3095578f6138c68c9cebd28dbb5c1[m
+Author: Huang Chao <huangchao0825@gmail.com>
+Date:   Fri Dec 9 14:30:57 2016 +0800
+
+    [#3] Use a generic link for the coding standard (#59)
+
+[33mcommit 24f72417815023aa7459fdab4620c95d0e6313fc[m
+Author: Akshay Narayan <okkhoy@gmail.com>
+Date:   Wed Aug 24 12:02:53 2016 +0800
+
+    Added line in test\runtests.bat to create bin directory if it doesn't exist on windows. (#23)
+
+[33mcommit a2c90b73921c84a7fe944e33fca05fa14da6e5a0[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 20 15:29:22 2016 +0800
+
+    Use correct phrasing for example commit message
+
+[33mcommit 54cf7c43346f6a6b71d6492a900eba2d406bdc8c[m
+Author: Wang Leng Tan <tanwangleng@outlook.com>
+Date:   Sat Aug 20 11:41:46 2016 +0800
+
+    [16][LO-Refactor] refers to the same learning outcome twice
+
+[33mcommit 3a8c7e8c5f0b8490afd104bb715507b436aa098b[m
+Author: Zhang Yi Jiang <mediumdeviation@gmail.com>
+Date:   Tue Aug 16 12:04:44 2016 +0800
+
+    [3] cd to script directory in runtests.sh and fix typo
+    
+    The script will not run properly otherwise if run from outside
+    the /tests directory.
+
+[33mcommit 1ec0bbf2bd7155c6de9baf2a5eed47a45328a8a8[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Aug 14 13:29:58 2016 +0800
+
+    Fix 2nd broken link to coding best practices
+    Fixes #14
+
+[33mcommit 68467674ff11a4d36321647819c24600c9566efa[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Aug 14 13:27:03 2016 +0800
+
+    Fix broken link to coding best practices
+    Fixes #14
+
+[33mcommit 1a8e61c0e7ccdd2fd8311c224f843ed48f156c8a[m
+Author: Wei Kang <weikangchia@gmail.com>
+Date:   Sat Aug 13 16:21:30 2016 +0800
+
+    [13] Add missing data type to README.md
+
+[33mcommit 150cec80a47a1488456488d5e2be4dc9c27a26f0[m[33m ([m[1;33mtag: v1.1[m[33m)[m
+Author: Thien Nguyen <thiennguyen1993@gmail.com>
+Date:   Thu Aug 11 14:12:33 2016 +0800
+
+    Add a runtests.sh #6 (#10)
+    
+    [6] Add a runtests.sh
+
+[33mcommit f33e570c13f03f1c91020c32109c4ebf569a23ce[m
+Author: Martin Choo <m133225@users.noreply.github.com>
+Date:   Thu Aug 11 12:58:57 2016 +0800
+
+    [12] Refine README (cosmetic)
+
+[33mcommit ceccce908102fefe059bf4e3dda8ab4385eaa54d[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Aug 11 09:55:57 2016 +0800
+
+    [9] Make userCommand variable local scope
+    
+    * Make userCommand variable local scope
+    
+    * updated I/O tests accordingly
+
+[33mcommit 22b0445020aa5cc946c103ffb237b619aad73ec0[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Aug 11 09:32:05 2016 +0800
+
+    [8] Rename _WORD_ constants to be consistent with others
+
+[33mcommit 2b90746fa72dab2622caf785d1f68759826b03c4[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Wed Aug 10 23:08:52 2016 +0800
+
+    Rephrase method comment to describe WHAT, not HOW, the method does
+
+[33mcommit e2253d6269b71d777e1040a84dc9667e2d5cfde3[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Aug 7 19:12:59 2016 +0800
+
+    Add link to reference process
+
+[33mcommit f62f7366f54acff4c9c92f6511c99186501f3363[m[33m ([m[1;33mtag: V1.0[m[33m)[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 6 15:30:23 2016 +0800
+
+    Tweak README text (cosmetic)
+
+[33mcommit bdf4fa639cb9d0ad0aaa4418fdc23f071c461e14[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sat Aug 6 15:08:42 2016 +0800
+
+    Change case of main headings, bold keywords
+
+[33mcommit b10d6e3589d8c055ddab3f917cac08c3eadaae07[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Aug 5 18:49:05 2016 +0800
+
+    Added description to an LO
+
+[33mcommit f9d85f555eb2950cbbcc28a125330bd5ca314216[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Aug 5 17:44:34 2016 +0800
+
+    Cross-linked LOs
+
+[33mcommit 01ee64f3dba59fa7a0c59a8426b33a2fe90e2bde[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Aug 5 17:40:54 2016 +0800
+
+    Refined Refactoring exercise
+
+[33mcommit 48d147c7cbb83aaced46714a3fa9d7a418ee831a[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Aug 5 17:25:13 2016 +0800
+
+    Reordered the LOs
+
+[33mcommit 648e9fd7f0d55f5e2d307a7ec0471498f691004d[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Aug 5 15:31:40 2016 +0800
+
+    Added resources to refactoring LO
+
+[33mcommit 656694f3e3e5d7455900c1f6d7b5443825bee28d[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Aug 4 15:26:29 2016 +0800
+
+    Tweaks to exercises
+
+[33mcommit 2172a006b571bc7c67510d829b3b217778919dc5[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Aug 4 11:28:18 2016 +0800
+
+    Minor tweaks to LOs
+
+[33mcommit d781cb093026adbb2eb361e3a58723f2a73eee9b[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Thu Aug 4 00:00:52 2016 +0800
+
+    Fixed minor typo
+
+[33mcommit 8dedcf8cd257e2ba4ce74545b0567f7393055335[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Wed Aug 3 23:49:55 2016 +0800
+
+    Updated links to slides
+
+[33mcommit 2877c3f4e0e8575469074cdf9663da56665e8adf[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Wed Aug 3 23:39:41 2016 +0800
+
+    Added eclipse slides
+
+[33mcommit ca7d628b66bcbe94599ca7a273586a56cf5e26b8[m[33m ([m[1;33mtag: v1.0beta[m[33m)[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 22:35:33 2016 +0800
+
+    Added another LO
+
+[33mcommit 50e4a47b036dfedd95b3b33eede4e3b4cd0210c4[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 20:25:43 2016 +0800
+
+    Added runtests.bat
+
+[33mcommit f2b874c86b1f936cf2a48b4fe9da92166784ff7d[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 19:57:41 2016 +0800
+
+    Refined usage documentation
+
+[33mcommit 57a60e7bf5c796f724448a0a4740b819d92377d8[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 18:27:08 2016 +0800
+
+    Refined .ignore file
+
+[33mcommit 3f060158a6865f705db10a1a03cd0e963fdb19db[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 18:22:00 2016 +0800
+
+    renamed package
+
+[33mcommit da92603c6bfeb204914632c672f9c81a37880411[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 18:16:51 2016 +0800
+
+    Minor tweaks to README
+
+[33mcommit 3a430884b2128758de123c28123f6fecff89e3c8[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 18:11:13 2016 +0800
+
+    Added the enum exercise
+
+[33mcommit 34c7dda9ad710b95406b3428ce9705479cee510c[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 17:00:15 2016 +0800
+
+    Replaces List<> with ArrayList<>
+
+[33mcommit b0b59b89c21f1100488716f95869ff9a122e0c2a[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 15:57:32 2016 +0800
+
+    Fixed some broken links to internal anchors
+
+[33mcommit e1611bb6699c783fe6b8e523264f26361bdf8bb7[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Tue Aug 2 00:05:22 2016 +0800
+
+    Added blank line
+
+[33mcommit 73067d160b500507e18d63134bdf182f76ec61dd[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 23:14:02 2016 +0800
+
+    Added more exercises
+
+[33mcommit fa388458f82d3664d8b072e43f558c6f00212432[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 22:06:48 2016 +0800
+
+    Added var args
+
+[33mcommit d557ff454a95ccc2c39692a02daff18c20b70484[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 21:27:32 2016 +0800
+
+    Avoided dummy return
+
+[33mcommit 9899c2bcf4b95165811e2d421575255cddfee9c3[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 21:22:31 2016 +0800
+
+    Exit -> Exits
+
+[33mcommit 6dd84278507fd59adac9c1ba2bde1d556582510f[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 21:20:09 2016 +0800
+
+    renamed default storage file
+
+[33mcommit e1549fd05891a213da302c5c0ff5141702f85ce0[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 21:12:39 2016 +0800
+
+    Fixed broken links
+
+[33mcommit 6a10e606d924dfa83687577c1c862dadd09665b7[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Mon Aug 1 19:06:52 2016 +0800
+
+    Added some exercises
+
+[33mcommit fe5655a29979a15e66717ab9543ae40453d8e547[m[33m ([m[1;33mtag: v0.1-alpha[m[33m)[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Sun Jul 31 22:31:20 2016 +0800
+
+    Polish code, readme, tests (#2)
+
+[33mcommit 57ab42de42e484efa16ccd717376f75255dbbb00[m
+Author: Leow Yijin <leowyijin@gmail.com>
+Date:   Sun Jul 31 10:26:45 2016 +0800
+
+    Cleaned, refactored, finished features, converted to address book context (#1)
+    
+    First full draft of AddressBook code
+
+[33mcommit b23349968081646a05451237fbd96e6f8f36011b[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Wed Jul 27 11:06:33 2016 +0800
+
+    Added Jeffry's code
+
+[33mcommit 861663697899ecad08c9bd5e42bb6abbd7617e99[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 20:00:49 2016 +0800
+
+    Updated .ignore file to ignore idea files
+
+[33mcommit bbfb24d82222c6d57dc7d8c1fb8d518d52e825cb[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 19:09:24 2016 +0800
+
+    Added missing line break
+
+[33mcommit 14cefd9db543c1e1b7de2a0254eb211ee01b8d57[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 19:08:35 2016 +0800
+
+    Minor tweak to exercise IDs
+
+[33mcommit c8b26916e3d96cda30a1ae1e6333ad2768bc20fd[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 19:07:36 2016 +0800
+
+    Addes skeletal contents for README
+
+[33mcommit 05e56041d74dbee9f8cec631060b42a11aeab1e8[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 15:30:49 2016 +0800
+
+    Added a README.md
+
+[33mcommit 93c303f7038cc453ef6e41438489068649828126[m
+Author: Damith C. Rajapakse <damith@gmail.com>
+Date:   Fri Jul 22 15:20:34 2016 +0800
+
+    Initial commit
