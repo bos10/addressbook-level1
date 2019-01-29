@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
+
 /*
  * NOTE : =============================================================
  * This class header comment below is brief because details of how to
@@ -70,6 +71,8 @@ public class AddressBook {
     private static final String MESSAGE_COMMAND_HELP = "%1$s: %2$s";
     private static final String MESSAGE_COMMAND_HELP_PARAMETERS = "\tParameters: %1$s";
     private static final String MESSAGE_COMMAND_HELP_EXAMPLE = "\tExample: %1$s";
+    private static final String MESSAGE_COUNT_HELP = "%1$s: %2$s";
+
     private static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     private static final String MESSAGE_DISPLAY_PERSON_DATA = "%1$s  Phone Number: %2$s  Email: %3$s";
     private static final String MESSAGE_DISPLAY_LIST_ELEMENT_INDEX = "%1$d. ";
@@ -132,6 +135,10 @@ public class AddressBook {
     private static final String COMMAND_EXIT_WORD = "exit";
     private static final String COMMAND_EXIT_DESC = "Exits the program.";
     private static final String COMMAND_EXIT_EXAMPLE = COMMAND_EXIT_WORD;
+
+    private static final String COMMAND_COUNT_WORD = "count";
+    private static final String COMMAND_COUNT_DESC = "Counts number of persons in address book";
+    private static final String COMMAND_COUNT_EXAMPLE = COMMAND_COUNT_WORD;
 
     private static final String DIVIDER = "===================================================";
 
@@ -381,11 +388,14 @@ public class AddressBook {
             return executeClearAddressBook();
         case COMMAND_HELP_WORD:
             return getUsageInfoForAllCommands();
+        case COMMAND_COUNT_WORD:
+            return executeCountAddressBook();
         case COMMAND_EXIT_WORD:
             executeExitProgramRequest();
         default:
             return getMessageForInvalidCommandInput(commandType, getUsageInfoForAllCommands());
         }
+
     }
 
     /**
@@ -461,6 +471,16 @@ public class AddressBook {
      *
      * @param personsDisplayed used to generate summary
      * @return summary message for persons displayed
+     */
+    private static String getMessageForPersonsCount(int numOfPersons) {
+        return "There is " + numOfPersons + " Persons in the Address Book";
+    }
+
+    /**
+     * Constructs a feedback message to the number of persons in the addressbook.
+     *
+     * @param numOfPersons used to generate summary
+     * @return Integer of num of persons in address book
      */
     private static String getMessageForPersonsDisplayedSummary(ArrayList<String[]> personsDisplayed) {
         return String.format(MESSAGE_PERSONS_FOUND_OVERVIEW, personsDisplayed.size());
@@ -578,6 +598,20 @@ public class AddressBook {
         showToUser(toBeDisplayed);
         return getMessageForPersonsDisplayedSummary(toBeDisplayed);
     }
+
+    /**
+     * Return number of persons in the address book to the user.
+     *
+     * @return feedback display message for the operation result
+     */
+
+    private static String executeCountAddressBook(){
+        // Count number of person in AB
+        int numOfPersons = getAllPersonsInAddressBook().size();
+        return getMessageForPersonsCount(numOfPersons);
+    }
+
+
 
     /**
      * Requests to terminate the program.
@@ -1087,8 +1121,9 @@ public class AddressBook {
                 + getUsageInfoForViewCommand() + LS
                 + getUsageInfoForDeleteCommand() + LS
                 + getUsageInfoForClearCommand() + LS
-                + getUsageInfoForExitCommand() + LS
-                + getUsageInfoForHelpCommand();
+                + getUsageInfoForExitCommand() + LSgi
+                + getUsageInfoForHelpCommand() + LS
+                + getUsageInfoForCountCommand();
     }
 
     /** Returns the string for showing 'add' command usage instruction */
@@ -1134,6 +1169,12 @@ public class AddressBook {
     private static String getUsageInfoForExitCommand() {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_EXIT_WORD, COMMAND_EXIT_DESC)
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_EXIT_EXAMPLE);
+    }
+
+    /** Returns the string for showing 'count' command usage instruction */
+    private static String getUsageInfoForCountCommand() {
+        return String.format(MESSAGE_COUNT_HELP, COMMAND_COUNT_WORD, COMMAND_COUNT_DESC)
+                + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_COUNT_EXAMPLE);
     }
 
 
